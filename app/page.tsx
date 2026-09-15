@@ -9,4 +9,5 @@ import Booking from "../components/Booking";
 import Footer from "../components/Footer";
 import MotionEnhancements from "../components/MotionEnhancements";
 import AmbientYouTube from "../components/AmbientYouTube";
-export default function Page() { return <><MotionEnhancements /><AmbientYouTube /><main><Navbar /><Hero /><MusicPlayer /><About /><Events /><Genres /><Experience3D /><Booking /><Footer /></main></>; }
+import SocialGallery from "../components/SocialGallery";
+export default function Page() { return <><MotionEnhancements /><AmbientYouTube /><main><Navbar /><Hero /><MusicPlayer /><About /><SocialGallery /><Events /><Genres /><Experience3D /><Booking /><Footer /></main></>; }
