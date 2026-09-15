@@ -24,6 +24,8 @@ export default function AmbientYouTube() {
     // uses a conservative pulse instead of pretending to expose its waveform.
     const localAudio = document.querySelector<HTMLAudioElement>("audio[data-ambient-audio], audio");
     let animationFrame = 0;
+    let fallbackFrame = 0;
+    let ambientPlaying = true;
     if (localAudio && window.AudioContext) {
       try {
         const context = new AudioContext();
@@ -45,6 +47,15 @@ export default function AmbientYouTube() {
       } catch {
         // An audio element may already be connected to another MediaElementSource.
       }
+    } else {
+      const publishFallback = (time: number) => {
+        if (ambientPlaying && !mutedRef.current) {
+          const pulse = 0.18 + (Math.sin(time * 0.006) + Math.sin(time * 0.013) * 0.5 + 1.5) * 0.12;
+          window.dispatchEvent(new CustomEvent("wakanda-audio-level", { detail: Math.min(1, pulse) }));
+        }
+        fallbackFrame = window.requestAnimationFrame(publishFallback);
+      };
+      fallbackFrame = window.requestAnimationFrame(publishFallback);
     }
     const startMuted = () => {
       // Request sound on entry; browsers may defer audible autoplay until a gesture.
@@ -54,6 +65,7 @@ export default function AmbientYouTube() {
     };
     const handleTransmissionAudio = (event: Event) => {
       const playing = (event as CustomEvent<{ playing: boolean }>).detail?.playing;
+      ambientPlaying = !playing;
       if (playing) {
         sendCommand("pauseVideo");
       } else if (!mutedRef.current) {
@@ -75,6 +87,7 @@ export default function AmbientYouTube() {
     window.addEventListener("keydown", activateAfterGesture, { once: true });
     return () => {
       if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      if (fallbackFrame) window.cancelAnimationFrame(fallbackFrame);
       analyserRef.current?.disconnect();
       void audioContextRef.current?.close();
       analyserRef.current = null;

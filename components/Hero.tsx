@@ -17,6 +17,7 @@ export default function Hero() {
           <a className="text-link" href="#events">Next transmissions <span aria-hidden="true">↓</span></a>
         </div>
         <a className="hero-social" href="https://www.instagram.com/wakanda_dj/" target="_blank" rel="noreferrer" aria-label="Follow DJ Wakanda on Instagram"><Instagram aria-hidden="true" /><span>Follow the frequency</span><b aria-hidden="true">↗</b></a>
+        <AudioSpectrum />
       </div>
 
       <a className="hero-index" href="#sound" aria-label="Scroll to the selected transmissions player">
@@ -27,3 +28,4 @@ export default function Hero() {
   );
 }
 import { Instagram } from "lucide-react";
+import AudioSpectrum from "./AudioSpectrum";
