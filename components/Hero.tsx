@@ -1,3 +1,7 @@
+import { Instagram } from "lucide-react";
+import AudioSpectrum from "./AudioSpectrum";
+import GlitchText from "./GlitchText";
+
 /**
  * The Hero keeps the supplied Wakanda artwork as its single visual background.
  * Content remains semantic and independent from the decorative image layer.
@@ -27,6 +31,3 @@ export default function Hero() {
     </section>
   );
 }
-import { Instagram } from "lucide-react";
-import AudioSpectrum from "./AudioSpectrum";
-import GlitchText from "./GlitchText";

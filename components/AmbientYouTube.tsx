@@ -39,7 +39,9 @@ export default function AmbientYouTube() {
         const bins = new Uint8Array(analyser.frequencyBinCount);
         const publish = () => {
           analyser.getByteFrequencyData(bins);
-          const level = bins.reduce((sum, value) => sum + value, 0) / (bins.length * 255);
+          const measured = bins.reduce((sum, value) => sum + value, 0) / (bins.length * 255);
+          const pulse = 0.1 + (Math.sin(performance.now() * 0.006) + 1) * 0.06;
+          const level = Math.max(measured, pulse);
           window.dispatchEvent(new CustomEvent("wakanda-audio-level", { detail: level }));
           animationFrame = window.requestAnimationFrame(publish);
         };
