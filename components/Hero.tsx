@@ -16,6 +16,7 @@ export default function Hero() {
           <a className="button button-orange" data-magnetic href="#sound">Enter the sound <span aria-hidden="true">↗</span></a>
           <a className="text-link" href="#events">Next transmissions <span aria-hidden="true">↓</span></a>
         </div>
+        <a className="hero-social" href="https://www.instagram.com/wakanda_dj/" target="_blank" rel="noreferrer" aria-label="Follow DJ Wakanda on Instagram"><Instagram aria-hidden="true" /><span>Follow the frequency</span><b aria-hidden="true">↗</b></a>
       </div>
 
       <a className="hero-index" href="#sound" aria-label="Scroll to the selected transmissions player">
@@ -25,3 +26,4 @@ export default function Hero() {
     </section>
   );
 }
+import { Instagram } from "lucide-react";
