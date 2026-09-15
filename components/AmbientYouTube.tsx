@@ -8,6 +8,7 @@ const VIDEO_ID = "TPI4mkZVkt0";
 export default function AmbientYouTube() {
   const frame = useRef<HTMLIFrameElement>(null);
   const [muted, setMuted] = useState(false);
+  const mutedRef = useRef(false);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
@@ -51,9 +52,18 @@ export default function AmbientYouTube() {
       sendCommand("setVolume", [100]);
       sendCommand("playVideo");
     };
+    const handleTransmissionAudio = (event: Event) => {
+      const playing = (event as CustomEvent<{ playing: boolean }>).detail?.playing;
+      if (playing) {
+        sendCommand("pauseVideo");
+      } else if (!mutedRef.current) {
+        sendCommand("playVideo");
+      }
+    };
 
     const currentFrame = frame.current;
     currentFrame?.addEventListener("load", startMuted);
+    window.addEventListener("wakanda-transmission-audio", handleTransmissionAudio);
     const activateAfterGesture = () => {
       if (!muted) {
         sendCommand("unMute");
@@ -70,6 +80,7 @@ export default function AmbientYouTube() {
       analyserRef.current = null;
       audioContextRef.current = null;
       currentFrame?.removeEventListener("load", startMuted);
+      window.removeEventListener("wakanda-transmission-audio", handleTransmissionAudio);
       window.removeEventListener("pointerdown", activateAfterGesture);
       window.removeEventListener("keydown", activateAfterGesture);
     };
@@ -77,6 +88,7 @@ export default function AmbientYouTube() {
 
   const toggleSound = () => {
     const nextMuted = !muted;
+    mutedRef.current = nextMuted;
     setMuted(nextMuted);
     sendCommand(nextMuted ? "mute" : "unMute");
     if (!nextMuted) sendCommand("setVolume", [100]);
