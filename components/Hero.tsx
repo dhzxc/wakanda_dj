@@ -9,9 +9,9 @@ export default function Hero() {
 
       <div className="hero-copy reveal">
         <img className="hero-mark" src="/images/wakanda-mark.png" alt="DJ Wakanda" />
-        <p className="eyebrow">DJ / PRODUCER / CULTURAL TRANSMITTER</p>
-        <h1 id="hero-title">Feel the<br /><em>frequency.</em></h1>
-        <p className="hero-lede">Afro-tech rhythms for future-facing bodies. A ritual in motion, curated by WAKANDA.</p>
+        <GlitchText text="DJ / PRODUCER / CULTURAL TRANSMITTER" className="eyebrow">DJ / PRODUCER / CULTURAL TRANSMITTER</GlitchText>
+        <h1 id="hero-title"><GlitchText text="Feel the">Feel the</GlitchText><br /><GlitchText text="frequency." as="em">frequency.</GlitchText></h1>
+        <GlitchText text="Afro-tech rhythms for future-facing bodies. A ritual in motion, curated by WAKANDA." className="hero-lede">Afro-tech rhythms for future-facing bodies. A ritual in motion, curated by WAKANDA.</GlitchText>
         <div className="hero-actions">
           <a className="button button-orange" data-magnetic href="#sound">Enter the sound <span aria-hidden="true">↗</span></a>
           <a className="text-link" href="#events">Next transmissions <span aria-hidden="true">↓</span></a>
@@ -29,3 +29,4 @@ export default function Hero() {
 }
 import { Instagram } from "lucide-react";
 import AudioSpectrum from "./AudioSpectrum";
+import GlitchText from "./GlitchText";
