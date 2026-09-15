@@ -20,8 +20,9 @@ export default function AudioSpectrum({ compact = false }: { compact?: boolean }
     <div className={`audio-spectrum${compact ? " audio-spectrum-compact" : ""}`} aria-hidden="true">
       {Array.from({ length: BAR_COUNT }, (_, index) => {
         const wave = (Math.sin(index * 0.72 + level * 11) + 1) / 2;
-        const height = 3 + (level * 25 + wave * level * 16);
-        return <i key={index} style={{ height: `${height}px`, opacity: 0.35 + level * 0.65 }} />;
+        const response = compact ? level * 34 + wave * level * 24 : level * 25 + wave * level * 16;
+        const height = 3 + response;
+        return <i key={index} style={{ height: `${height}px`, opacity: 0.4 + level * 0.6 }} />;
       })}
     </div>
   );

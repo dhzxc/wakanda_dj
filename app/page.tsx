@@ -10,4 +10,5 @@ import Footer from "../components/Footer";
 import MotionEnhancements from "../components/MotionEnhancements";
 import AmbientYouTube from "../components/AmbientYouTube";
 import SocialGallery from "../components/SocialGallery";
-export default function Page() { return <><MotionEnhancements /><AmbientYouTube /><main><Navbar /><Hero /><MusicPlayer /><About /><SocialGallery /><Events /><Genres /><Experience3D /><Booking /><Footer /></main></>; }
+import SideScrollControls from "../components/SideScrollControls";
+export default function Page() { return <><MotionEnhancements /><AmbientYouTube /><SideScrollControls /><main><Navbar /><Hero /><MusicPlayer /><About /><SocialGallery /><Events /><Genres /><Experience3D /><Booking /><Footer /></main></>; }

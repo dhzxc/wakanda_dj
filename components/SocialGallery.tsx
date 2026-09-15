@@ -32,7 +32,7 @@ export default function SocialGallery() {
             src={`https://www.instagram.com/p/${post.id}/embed/captioned/?img_index=${post.index}`}
             title={`${post.label} from DJ Wakanda on Instagram`}
             loading="lazy"
-            allowTransparency
+            allowTransparency={true}
           />
         </div>
         <div className="social-gallery-controls">

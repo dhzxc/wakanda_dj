@@ -11,3 +11,5 @@ out/
 coverage/
 *.log
 
+.vercel
+.env*

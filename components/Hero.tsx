@@ -9,7 +9,7 @@ import GlitchText from "./GlitchText";
 export default function Hero() {
   return (
     <section className="hero" id="top" aria-labelledby="hero-title">
-      <div className="hero-kicker" aria-hidden="true"><span>WK—001</span><span>JOHANNESBURG / GLOBAL</span></div>
+      <div className="hero-kicker" aria-hidden="true"><span>WK—001</span><span>MEDELLIN / GLOBAL</span></div>
 
       <div className="hero-copy reveal">
         <img className="hero-mark" src="/images/wakanda-mark.png" alt="DJ Wakanda" />

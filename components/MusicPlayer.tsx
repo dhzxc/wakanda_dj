@@ -12,6 +12,18 @@ export default function MusicPlayer() {
   const notifyAmbient = (isPlaying: boolean) => {
     window.dispatchEvent(new CustomEvent("wakanda-transmission-audio", { detail: { playing: isPlaying } }));
   };
+  useEffect(() => {
+    if (!playing || !track.youtubeId) return;
+    let frame = 0;
+    const publishTransmissionLevel = (time: number) => {
+      const beat = (Math.sin(time * 0.012) + Math.sin(time * 0.021) * 0.45 + 1.45) / 2.45;
+      const level = 0.3 + beat * 0.48;
+      window.dispatchEvent(new CustomEvent("wakanda-audio-level", { detail: level }));
+      frame = window.requestAnimationFrame(publishTransmissionLevel);
+    };
+    frame = window.requestAnimationFrame(publishTransmissionLevel);
+    return () => window.cancelAnimationFrame(frame);
+  }, [playing, track.youtubeId]);
   useEffect(() => { const el = audio.current; if (!el) return; const update = () => setProgress(el.duration ? el.currentTime / el.duration * 100 : 0); el.addEventListener("timeupdate", update); return () => el.removeEventListener("timeupdate", update); }, [active]);
   const sendYouTube = (func: string) => youtube.current?.contentWindow?.postMessage(JSON.stringify({ event: "command", func }), "https://www.youtube.com");
   const toggle = async () => {
