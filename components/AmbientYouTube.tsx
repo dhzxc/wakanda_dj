@@ -1,0 +1,108 @@
+"use client";
+
+import { Volume2, VolumeX } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+const VIDEO_ID = "TPI4mkZVkt0";
+
+export default function AmbientYouTube() {
+  const frame = useRef<HTMLIFrameElement>(null);
+  const [muted, setMuted] = useState(false);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+
+  const sendCommand = useCallback((func: string, args: unknown[] = []) => {
+    frame.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: "command", func, args }),
+      "https://www.youtube.com",
+    );
+  }, []);
+
+  useEffect(() => {
+    // Local audio can be analysed; the YouTube iframe is cross-origin and intentionally
+    // uses a conservative pulse instead of pretending to expose its waveform.
+    const localAudio = document.querySelector<HTMLAudioElement>("audio[data-ambient-audio], audio");
+    let animationFrame = 0;
+    if (localAudio && window.AudioContext) {
+      try {
+        const context = new AudioContext();
+        const analyser = context.createAnalyser();
+        analyser.fftSize = 128;
+        const source = context.createMediaElementSource(localAudio);
+        source.connect(analyser);
+        analyser.connect(context.destination);
+        audioContextRef.current = context;
+        analyserRef.current = analyser;
+        const bins = new Uint8Array(analyser.frequencyBinCount);
+        const publish = () => {
+          analyser.getByteFrequencyData(bins);
+          const level = bins.reduce((sum, value) => sum + value, 0) / (bins.length * 255);
+          window.dispatchEvent(new CustomEvent("wakanda-audio-level", { detail: level }));
+          animationFrame = window.requestAnimationFrame(publish);
+        };
+        publish();
+      } catch {
+        // An audio element may already be connected to another MediaElementSource.
+      }
+    }
+    const startMuted = () => {
+      // Request sound on entry; browsers may defer audible autoplay until a gesture.
+      sendCommand("unMute");
+      sendCommand("setVolume", [100]);
+      sendCommand("playVideo");
+    };
+
+    const currentFrame = frame.current;
+    currentFrame?.addEventListener("load", startMuted);
+    const activateAfterGesture = () => {
+      if (!muted) {
+        sendCommand("unMute");
+        sendCommand("setVolume", [100]);
+        sendCommand("playVideo");
+      }
+    };
+    window.addEventListener("pointerdown", activateAfterGesture, { once: true });
+    window.addEventListener("keydown", activateAfterGesture, { once: true });
+    return () => {
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      analyserRef.current?.disconnect();
+      void audioContextRef.current?.close();
+      analyserRef.current = null;
+      audioContextRef.current = null;
+      currentFrame?.removeEventListener("load", startMuted);
+      window.removeEventListener("pointerdown", activateAfterGesture);
+      window.removeEventListener("keydown", activateAfterGesture);
+    };
+  }, [sendCommand]);
+
+  const toggleSound = () => {
+    const nextMuted = !muted;
+    setMuted(nextMuted);
+    sendCommand(nextMuted ? "mute" : "unMute");
+    if (!nextMuted) sendCommand("setVolume", [100]);
+    sendCommand("playVideo");
+  };
+
+  return (
+    <>
+      <iframe
+        ref={frame}
+        className="ambient-video"
+        title="DJ WAKANDA ambient transmission"
+        src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&mute=0&controls=0&loop=1&playlist=${VIDEO_ID}&playsinline=1&enablejsapi=1`}
+        allow="autoplay; encrypted-media"
+        aria-hidden="true"
+      />
+      <button
+        className="sound-toggle"
+        type="button"
+        onClick={toggleSound}
+        aria-label={muted ? "Activate ambient sound" : "Mute ambient sound"}
+        aria-pressed={!muted}
+      >
+        {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+        <span>{muted ? "Activate sound" : "Sound on"}</span>
+      </button>
+    </>
+  );
+}

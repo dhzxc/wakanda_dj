@@ -1,0 +1,4 @@
+"use client";
+import { useState } from "react";
+const genres = ["Afro Tech", "Deep House", "Gqom", "Amapiano", "Broken Beat"];
+export default function Genres() { const [active, setActive] = useState(0); return <section className="genres reveal" id="sound"><div className="genres-head"><p className="eyebrow">003 / THE FREQUENCY</p><h2>One root.<br /><span>Many branches.</span></h2></div><div className="genre-tabs" role="tablist" aria-label="Music genres">{genres.map((g, i) => <button role="tab" aria-selected={i === active} className={i === active ? "selected" : ""} onClick={() => setActive(i)} key={g}>{`0${i + 1}`}<span>{g}</span></button>)}</div><div className="genre-note"><span>NOW PLAYING / {genres[active].toUpperCase()}</span><p>Polyrhythmic low-end, analog heat, and a pulse that refuses to stand still.</p></div></section>; }

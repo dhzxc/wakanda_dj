@@ -1,0 +1,2 @@
+import { events } from "../lib/events";
+export default function Events() { return <section className="events section-grid reveal" id="events"><div><p className="eyebrow">002 / TRANSMISSIONS</p><h2>Upcoming<br /><span>rituals.</span></h2></div><div className="event-list stagger-group">{events.map((e) => <div className="event" key={`${e.date}-${e.city}`}><strong>{e.date}</strong><span><b>{e.city}</b><small>{e.venue}</small></span><em className={e.status === "SOLD OUT" ? "sold" : ""}>{e.status}</em></div>)}</div></section>; }

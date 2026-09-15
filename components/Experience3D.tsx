@@ -1,0 +1,1 @@
+export default function Experience3D() { return <section className="experience reveal"><div className="experience-shape" /><p className="eyebrow">THE WAKANDA EXPERIENCE</p><h2>Not a show.<br /><em>A state of being.</em></h2><a className="text-link" data-magnetic href="#booking">Build the ritual ↗</a></section>; }

@@ -1,0 +1,1 @@
+export default function SocialLinks() { return <div className="socials"><a href="https://www.instagram.com/wakanda_dj/" target="_blank" rel="noreferrer">Instagram ↗</a><a href="https://www.youtube.com/@wakandaenlazona1919" target="_blank" rel="noreferrer">YouTube ↗</a><a href="#sound">Soundcloud ↗</a></div>; }
